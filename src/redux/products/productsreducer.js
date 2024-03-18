@@ -2,7 +2,10 @@
 
 
 const initialstate={
-    products:[]
+    products:[],
+    loader:false,
+    error:null,
+    cart:[]
 }
 
 export function productReducer(state=initialstate,action){
@@ -10,29 +13,40 @@ export function productReducer(state=initialstate,action){
         case "GET-PRODUCT-SUCESS":
             return {...state,products:action.payload}
             case "ADD-NEW-PRODUCT":
-                return{...state,products:[...state.products,{
-                    "id": 1,
-            "title": "iPhone 16",
-            "description": "An apple mobile which is nothing like apple",
-            "price": 549,
-            "discountPercentage": 12.96,
-            "rating": 4.69,
-            "stock": 94,
-            "brand": "Apple",
-            "category": "smartphones",
-            "thumbnail": "https://cdn.dummyjson.com/product-images/1/thumbnail.jpg",
-            "images": [
-                "https://cdn.dummyjson.com/product-images/1/1.jpg",
-                "https://cdn.dummyjson.com/product-images/1/2.jpg",
-                "https://cdn.dummyjson.com/product-images/1/3.jpg",
-                "https://cdn.dummyjson.com/product-images/1/4.jpg",
-                "https://cdn.dummyjson.com/product-images/1/thumbnail.jpg"]
+                return{...state,products:[...state.products,action.payload]}
 
-                }]}
+                case "DELETE-PRODUCT":
+                 const id=action.payload
+                    const newState=state.products.filter(item=>item.id!==id)
+                    return {...state,products:newState}
 
-                case "DELETE_A_PRODUCT":
-                    return{...state,products:state.products.filter(product=>product.id!==1)
-                        }
+                    case "UPDATE-PRODUCT":
+                        const updateId=action.payload
+                        const newUpdateState=state.products.map(item=>{
+                            if(item.id==updateId){
+                                return{...item,title:"SAMSUNG"}
+                            }
+                            else{
+                                return item
+                            }
+                        })
+
+                        return {...state,products:newUpdateState}
+                   
+                  case "SHOW-LOADER":
+                    return{...state,loader:true}
+
+                    case "HIDE_LOADER":
+                        return{...state,loader:false}
+
+                        case "PRODUCTS_ERROR":
+                            return{...state,error: "somethinmg went wrong"}
+                            case "ADD-CART":
+                                return{...state,cart:[...state.cart,action.payload ]}
+
+                // case "DELETE_A_PRODUCT":
+                //     return{...state,products:state.products.filter(product=>product.id!==1)
+                //         }
 
 
 
